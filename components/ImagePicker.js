@@ -1,10 +1,13 @@
 import React from 'react';
-import { Button, Image, View } from 'react-native';
-import { ImagePicker } from 'expo';
+import { Image, View } from 'react-native';
+import { Button } from 'react-native-elements';
+import { ImagePicker, Permissions, Camera } from 'expo';
 
 export class ImagePickerExample extends React.Component {
   state = {
     image: null,
+    hasCameraPermission: null,
+    hasCameraRollPermission: null
   };
 
   render() {
@@ -26,43 +29,44 @@ export class ImagePickerExample extends React.Component {
     );
   }
 
-  _pickPhoto = async () => {
-    const status = await this.getCameraRollPermission();
-    if (status) {
+  async componentDidMount() {
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    // this.setState({ hasCameraPermission: status === 'granted' });
+  }
 
-        let result = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-        });
-        console.log(result);
-        if (!result.cancelled) {
-          this.setState({ image: result.uri });
-        }
-    } else {
-        alert('Hey! You might want to enable the camera for my app, it is very good.');
+  _pickPhoto = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    this.setState({ hasCameraRollPermission: status === 'granted' });
+
+    if (!this.state.hasCameraRollPermission) {
+      alert('Hey! You might want to enable the camera for my app, it is very good.');
+      return;
+    }
+    let result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 5],
+    });
+    console.log(result);
+    if (!result.cancelled) {
+        this.setState({ image: result.uri });
     }
   };
   _takePhoto = async () => {
-    const status = await this.getCameraPermission();
-    if (status) {
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      if (!result.cancelled) {
-        // this.props.navigation.navigate('NewPost', { image: result.uri });
-        this.setState({ image: result.uri });
-      }
-    } else {
-        alert('Hey! You might want to enable the camera for my app, it is very good.');
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' });
+    
+    if (!this.state.hasCameraPermission) {
+      alert('Hey! You might want to enable the camera for my app, it is very good.');
+      return;
     }
-  }
-  getCameraRollPermission = () => {
-    const { Permissions } = Expo;
-    return Permissions.getAsync(Permissions.CAMERAL_ROLL);
-  }
-  getCameraPermission = () => {
-    const { Permissions } = Expo;
-    return Permissions.getAsync(Permissions.CAMERAL);
+    
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 5],
+    });
+    if (!result.cancelled) {
+      // this.props.navigation.navigate('NewPost', { image: result.uri });
+      this.setState({ image: result.uri });
+    }
   }
 }
