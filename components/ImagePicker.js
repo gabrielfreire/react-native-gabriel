@@ -6,8 +6,7 @@ import { ImagePicker, Permissions, Camera } from 'expo';
 export class ImagePickerExample extends React.Component {
   state = {
     image: null,
-    hasCameraPermission: null,
-    hasCameraRollPermission: null
+    hasCameraPermission: null
   };
 
   render() {
@@ -30,15 +29,12 @@ export class ImagePickerExample extends React.Component {
   }
 
   async componentDidMount() {
-    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    // this.setState({ hasCameraPermission: status === 'granted' });
+    const { status } = await Permissions.askAsync([Permissions.CAMERA, Permissions.CAMERA_ROLL]);
+    this.setState({ hasCameraPermission: status === 'granted' });
   }
 
   _pickPhoto = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    this.setState({ hasCameraRollPermission: status === 'granted' });
-
-    if (!this.state.hasCameraRollPermission) {
+    if (!this.state.hasCameraPermission) {
       alert('Hey! You might want to enable the camera for my app, it is very good.');
       return;
     }
@@ -52,9 +48,6 @@ export class ImagePickerExample extends React.Component {
     }
   };
   _takePhoto = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
-    
     if (!this.state.hasCameraPermission) {
       alert('Hey! You might want to enable the camera for my app, it is very good.');
       return;
