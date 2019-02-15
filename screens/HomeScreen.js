@@ -47,7 +47,6 @@ export default class HomeScreen extends React.Component {
   }
   componentDidMount () {
     this.getData();
-    // this.registerLocationNotificationsAndCamera();
   }
 
   render() {
@@ -66,14 +65,13 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View> */}
-          <FetchLocation location={this.state.userLocation} onGetLocation={this.getUserLocationHandler}/>
-          
           <View style={styles.helpContainer}>
             <FetchData data={this.state.data}></FetchData>
           </View>
           <View style={styles.helpContainer}>
-            <ImagePickerExample></ImagePickerExample>
+            <FetchLocation location={this.state.userLocation} onGetLocation={this.getUserLocationHandler}/>
           </View>
+          <ImagePickerExample></ImagePickerExample>
           {/* <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
@@ -143,45 +141,6 @@ export default class HomeScreen extends React.Component {
       'http://www.gabrielfreire.com.br'
     );
   };
-  registerLocationNotificationsAndCamera = async () => {
-    let status;
-    status = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    let statusNotifications = status.status;
-    console.log("Notifications Permissions: ", statusNotifications);
-
-    status = await Permissions.getAsync(Permissions.LOCATION);
-    let statusLocation = status.status;
-    console.log("Location Permissions: ", statusLocation);
-
-    status = await Permissions.getAsync(Permissions.CAMERA_ROLL);
-    let statusCamera = status.status;
-    console.log("Camera Roll Permissions: ", statusLocation);
-
-    if (statusNotifications !== "granted") {
-      console.log("Requesting Notification Permissions");
-      status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      statusNotifications = status.status;
-    }
-
-    if (statusLocation !== "granted") {
-      console.log("Requesting Location Permissions");
-      status = await Permissions.askAsync(Permissions.LOCATION);
-      statusLocation = status.status;
-    }
-
-    if (statusCamera !== "granted") {
-      console.log("Requesting Camera Permissions");
-      status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      statusCamera = status.status;
-    }
-
-    if (statusNotifications !== "granted" || statusLocation !== "granted" || statusCamera !== 'granted') {
-      console.log("Permissions not granted");
-      return;
-    }
-
-    console.log("Permissions Granted!");
-  }
 }
 
 const styles = StyleSheet.create({

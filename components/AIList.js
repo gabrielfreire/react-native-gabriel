@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image} from 'react-native';
-import { Card, ListItem, Button, Icon, Badge } from 'react-native-elements'
+import { Card, Badge } from 'react-native-elements'
 
 const apps = [
     {
@@ -11,7 +11,7 @@ const apps = [
     {
         name: 'Super resolution',
         avatar: 'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX34381966.jpg',
-        status: 'error'
+        status: 'error' // error: service not available | success: service available
     }
 ]
 const styles = StyleSheet.create({
@@ -50,17 +50,17 @@ export class AIList extends React.Component {
                 <Card title="AI Applications">
                     {
                         apps.map((u, i) => {
-                        return (
-                            <View key={i} style={styles.apps}>
-                                <Image
-                                    style={styles.image}
-                                    resizeMode="cover"
-                                    source={{ uri: u.avatar }}
-                                />
-                                <Text style={styles.name}>{u.name}</Text>
-                                <Badge style={styles.badge} status={u.status}/>
-                            </View>
-                        );
+                            return (
+                                <View key={i} style={styles.apps}>
+                                    <Image
+                                        style={styles.image}
+                                        resizeMode="cover"
+                                        source={{ uri: u.avatar }}
+                                    />
+                                    <Text style={styles.name}>{u.name}</Text>
+                                    <Badge style={styles.badge} status={u.status}/>
+                                </View>
+                            );
                         })
                     }
                 </Card>

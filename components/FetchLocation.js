@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 
 const styles = StyleSheet.create({
     container: {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     locationBtn : {
-        width: 150,
+        width: 200,
         margin: 10
     }
 });
@@ -30,8 +30,11 @@ export class FetchLocation extends React.Component {
         }
         return (
             <View style={styles.container}>
-                <Button style={styles.locationBtn} title="Get My location" onPress={this.props.onGetLocation}/>
-                {/* // <Text value={props.location}/> */}
+                <Button 
+                icon={ <Icon name="add-location" size={20} color="white" type="material-icons"/> }
+                style={styles.locationBtn} 
+                title="Get My location" 
+                onPress={this.props.onGetLocation}/>
                 {location}
             </View>
         )
